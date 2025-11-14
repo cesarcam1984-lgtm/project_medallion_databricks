@@ -1,99 +1,157 @@
-# project_medallion_databricks
-Proyecto Final – Arquitectura Medallion con Azure + Databricks
+🏗️ Proyecto Final – Arquitectura Medallion con Azure + Databricks
 
-Este proyecto implementa una arquitectura Medallion (Bronze → Silver → Gold) utilizando Azure Data Lake, Azure Databricks, Delta Lake y PySpark.
+Autor: César Fernando Campos Millán
+Curso: Ingeniería de Datos e IA con Databricks
+Fecha: Noviembre 2025
 
+Este proyecto implementa un flujo completo de ingesta, transformación y analítica utilizando la Arquitectura Medallion (Bronze → Silver → Gold) sobre Azure Databricks y Azure Data Lake Storage (ADLS).
 Incluye:
 
-Ingesta de datos RAW (Bronze)
+ETL en PySpark
 
-Transformación y limpieza robusta (Silver)
+Tablas Delta en cada capa
 
-Modelo final analítico unificado (Gold)
+Orquestación mediante Workflow (Job)
 
-Dashboard embebido con Databricks
+Dashboards analíticos en Databricks
 
-Código organizado y publicado en GitHub
+🚀 Arquitectura General del Proyecto
 
-✔️ Arquitectura
-Bronze → Silver → Gold → Dashboard
+El flujo de datos sigue el estándar de la arquitectura Medallion:
 
+RAW → BRONZE → SILVER → GOLD → Dashboards
 
-Bronze: Datos crudos, sin transformar.
+Tecnologías utilizadas:
 
-Silver: Estandarización, limpieza, cast, null handling, enriquecimiento.
+Azure Data Lake Storage (ADLS)
 
-Gold: Unificación Marketing + Ecommerce para analítica.
+Azure Databricks
 
-✔️ ETL Implementada
-🟫 Bronze
+PySpark
 
-Carga directa desde CSV a tablas Delta.
+Delta Lake
 
-Se crean:
+Unity Catalog
 
-smartdata.bronze.marketing_campaign_raw
+Databricks SQL Dashboards
+
+Workflows (Jobs)
+
+🥉 Capa BRONZE – Ingesta de Datos Crudos
+
+En esta capa se cargaron los datasets originales:
+
+marketing_campaign.csv (desde DBFS)
+
+Ecommerce_Sales_Prediction_Dataset.csv (desde ADLS)
+
+Acciones realizadas:
+
+Lectura en formato CSV
+
+Inferencia de esquema
+
+Normalización básica de columnas
+
+Almacenamiento en Delta Lake
+
+Tablas generadas:
+
+smartdata.bronze.marketing_raw
 
 smartdata.bronze.ecommerce_raw
 
-🟪 Silver
+🥈 Capa SILVER – Limpieza y Transformación
 
-Limpieza completa:
+Acciones realizadas:
 
-cast de tipos
+Conversión de tipos de datos (fechas, enteros, double)
 
-normalización
+Estandarización de columnas
 
-eliminación de duplicados
+Preparación de datos para la capa analítica
 
-creación de columnas derivadas como:
+Tablas generadas:
 
-Total_Spending
+smartdata.silver.marketing_campaign_silver
+
+smartdata.silver.ecommerce_silver
+
+🥇 Capa GOLD – Enriquecimiento Analítico
+
+En GOLD se generan métricas, agregaciones y nuevas columnas:
+
+Nuevas variables:
 
 Age
 
-Income_Level
+Total_Spend
 
-🟨 Gold
+Net_Price
 
-Unión completa entre Marketing y Ecommerce
+Revenue
 
-Cálculo de KPIs
-
-Creación de tabla final para dashboard:
+Se creó una tabla final unificada:
 
 smartdata.gold.sales_marketing_gold
 
-✔️ Dataframes Resultantes
-Tabla GOLD contiene:
+Esta tabla combina información de marketing y ventas para análisis avanzados.
 
-2.216.000 registros
+⚙️ Workflow (Job) del Proyecto
 
-39 columnas limpias listas para analítica
+Se configuró un Job/Workflow llamado:
 
-Segmentos: Premium, Regular, Occasional
+job_medallion_etl_full
 
-Categorías: Fashion, Sports, Electronics, Home Decor, Toys
+Características:
 
-📊 Dashboard
+Ejecuta el notebook del ETL completo
 
-Incluye 3 visualizaciones:
+Usa el cluster smartdata_cluster_uc
 
-Ventas por Categoría (bar chart)
+Procesa Bronze → Silver → Gold automáticamente
 
-Marketing Spend por Segmento
+Validado exitosamente (Runs en verde)
 
-Compras Web vs Tienda
+Capturas incluidas en el repositorio:
 
-Todas construidas directamente sobre la tabla GOLD.
+Ejecución (Runs)
 
-📁 Estructura del Repositorio
-etl/           → scripts de ETL Bronze/Silver/Gold
-notebooks/     → notebook principal del proyecto
-dashboards/    → capturas de las visualizaciones
-scripts/       → SQL de catálogo y permisos
+Definición de tareas (Tasks)
 
-👨‍💻 Autor
+📊 Dashboards del Proyecto
+
+Se generaron 3 dashboards en Databricks SQL:
+
+📌 1. Ventas por Categoría
+
+Muestra ingresos por tipo de producto.
+
+📌 2. Marketing Spend por Segmento
+
+Analiza gasto en marketing por segmento de cliente.
+
+📌 3. Compras Web vs Tienda
+
+Comparación de canales y comportamiento del consumidor.
+
+Imágenes adjuntas en la carpeta /dashboards.
+
+📝 Resultados y Conclusiones
+
+Arquitectura Medallion implementada de forma correcta
+
+ETL funcionando end-to-end
+
+Tablas Delta creadas correctamente bajo Unity Catalog
+
+Dashboards funcionales para análisis de negocio
+
+Workflow ejecutado con éxito (estado: Succeeded)
+
+Proyecto listo para presentación y evaluación
+
+📫 Contacto
 
 César Fernando Campos Millán
-Especialista en Big Data | Arquitectura de Datos | PySpark | Azure | Databricks
+Especialista en Big Data y Analítica
