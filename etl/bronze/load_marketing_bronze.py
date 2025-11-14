@@ -18,9 +18,9 @@ print("📂 Leyendo archivo RAW desde:", input_path)
 # Cargar archivo CSV
 df_mkt_bronze = (
     spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")   # detecta tipos automáticamente
-    .load(input_path)
+        .option("header", "true")
+        .option("inferSchema", "true")  # detecta tipos automáticamente
+        .load(input_path)
 )
 
 # Validación básica
@@ -31,5 +31,4 @@ df_mkt_bronze.write.format("delta") \
     .mode("overwrite") \
     .saveAsTable("smartdata.bronze.marketing_raw")
 
-print("🟫 Tabla Bronze creada: smartdata.bronze.marketing_raw")
-print("🚀 Proceso BRONZE finalizado correctamente.")
+print("🟫 Tabla
