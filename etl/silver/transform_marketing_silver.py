@@ -4,37 +4,30 @@ from pyspark.sql import functions as F
 
 def transform_marketing_silver(df):
     """
-    Aplica las transformaciones necesarias al dataset de marketing
-    para generar la capa Silver.
-
-    Transformaciones:
-    - Casting de Income a double
-    - Casting de Dt_Customer a date
-    - Eliminación de duplicados
+    Transformaciones Silver:
+    - Income → double
+    - Dt_Customer → date
+    - Quita duplicados
     """
     df_silver = (
         df.withColumn("Income", F.col("Income").cast("double"))
-          .withColumn("Dt_Customer", F.col("Dt_Customer").cast("date"))
+          .withColumn("Dt_Customer", F.to_date("Dt_Customer"))
           .dropDuplicates()
     )
     return df_silver
 
 
 def main():
-    # Crear SparkSession
     spark = SparkSession.builder.getOrCreate()
 
-    # Seleccionar catálogo y esquema
     spark.sql("USE CATALOG smartdata")
     spark.sql("USE SCHEMA silver")
 
-    # Cargar tabla Bronze
+    # Cargar Bronze real
     df_mkt_bronze = spark.table("smartdata.bronze.marketing_raw")
 
-    # Aplicar transformaciones Silver
     df_mkt_silver = transform_marketing_silver(df_mkt_bronze)
 
-    # Guardar tabla Silver en Delta
     df_mkt_silver.write \
         .format("delta") \
         .mode("overwrite") \
