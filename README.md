@@ -21,6 +21,48 @@ El flujo de datos sigue el estándar de la arquitectura Medallion:
 
 RAW → BRONZE → SILVER → GOLD → Dashboards
 
+                        ┌──────────────────────────┐
+                        │      Azure Storage        │
+                        │  (Data Lake - ADLS Gen2)  │
+                        ├──────────────────────────┤
+                        │ Containers:               │
+                        │  • bronze                 │
+                        │  • silver                 │
+                        │  • gold                   │
+                        └───────────────┬──────────┘
+                                        │
+                                        ▼
+                 ┌────────────────────────────────────────┐
+                 │            Databricks (UC)             │
+                 ├────────────────────────────────────────┤
+                 │  • Notebooks PySpark (ETL)             │
+                 │  • Unity Catalog: smartdata             │
+                 │      Schemas: bronze, silver, gold      │
+                 │  • Delta Lake Tables                    │
+                 └───────────────┬────────────────────────┘
+                                 │
+                                 ▼
+                   ┌───────────────────────────┐
+                   │   Workflow (Job)          │
+                   │  job_medallion_etl_full   │
+                   │  Ejecuta ETL completo     │
+                   └──────────────┬────────────┘
+                                  │
+                                  ▼
+                   ┌───────────────────────────┐
+                   │         Gold Layer         │
+                   │  sales_marketing_gold      │
+                   └──────────────┬────────────┘
+                                  │
+                                  ▼
+                    ┌──────────────────────────┐
+                    │      Dashboards SQL       │
+                    │  • Ventas por Categoría   │
+                    │  • Spend por Segmento     │
+                    │  • Web vs Tienda          │
+                    └──────────────────────────┘
+
+
 Tecnologías utilizadas:
 
 Azure Data Lake Storage (ADLS)
