@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
 
 # =========================================================
 #  BRONZE - Carga de datos RAW (Ecommerce)
@@ -10,8 +11,8 @@ spark = SparkSession.builder.getOrCreate()
 spark.sql("USE CATALOG smartdata")
 spark.sql("USE SCHEMA bronze")
 
-# Ruta del archivo
-input_path = "dbfs:/FileStore/ecommerce_data.csv"
+# Ruta del archivo (ADLS)
+input_path = "abfss://bronze@adlssmartdatacesar.dfs.core.windows.net/Ecommerce_Sales_Prediction_Dataset.csv"
 
 print("📂 Leyendo archivo RAW desde:", input_path)
 
@@ -19,14 +20,13 @@ print("📂 Leyendo archivo RAW desde:", input_path)
 df_ecom_bronze = (
     spark.read.format("csv")
     .option("header", "true")
-    .option("inferSchema", "true")   # detectar tipos automáticamente
+    .option("inferSchema", "true")
     .load(input_path)
 )
 
-# Verificación básica
 print("✅ Registros cargados en Bronze (Ecommerce):", df_ecom_bronze.count())
 
-# Guardar en formato Delta
+# Guardar como Delta
 df_ecom_bronze.write.format("delta") \
     .mode("overwrite") \
     .saveAsTable("smartdata.bronze.ecommerce_raw")
